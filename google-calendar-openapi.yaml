@@ -1,3 +1,4 @@
+
 openapi: 3.1.0
 info:
   title: Google Calendar Events API
@@ -16,7 +17,7 @@ paths:
         - name: calendarId
           in: path
           required: true
-          description: El ID del calendario. Usa "primary" para el calendario principal.
+          description: ID del calendario. Usa "primary" para el calendario principal.
           schema:
             type: string
       requestBody:
@@ -25,6 +26,10 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - summary
+                - start
+                - end
               properties:
                 summary:
                   type: string
@@ -46,15 +51,14 @@ paths:
                       format: date-time
                     timeZone:
                       type: string
-              required: [summary, start, end]
       responses:
         '200':
-          description: Evento creado exitosamente.
+          description: Evento creado exitosamente
 
   /calendars/{calendarId}/events/{eventId}:
     get:
       operationId: getEvent
-      summary: Obtiene detalles de un evento específico.
+      summary: Obtiene un evento
       parameters:
         - name: calendarId
           in: path
@@ -68,11 +72,11 @@ paths:
             type: string
       responses:
         '200':
-          description: Detalles del evento.
+          description: Detalles del evento
 
     patch:
       operationId: updateEvent
-      summary: Actualiza un evento existente.
+      summary: Actualiza un evento existente
       parameters:
         - name: calendarId
           in: path
@@ -113,11 +117,11 @@ paths:
                       type: string
       responses:
         '200':
-          description: Evento actualizado exitosamente.
+          description: Evento actualizado exitosamente
 
     delete:
       operationId: deleteEvent
-      summary: Elimina un evento específico.
+      summary: Elimina un evento
       parameters:
         - name: calendarId
           in: path
@@ -131,7 +135,7 @@ paths:
             type: string
       responses:
         '204':
-          description: Evento eliminado correctamente.
+          description: Evento eliminado correctamente
 
 components:
   securitySchemes:
@@ -142,7 +146,4 @@ components:
           authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
           tokenUrl: https://oauth2.googleapis.com/token
           scopes:
-            https://www.googleapis.com/auth/calendar: Acceso completo al calendario del usuario.
-
-security:
-  - oauth2: [https://www.googleapis.com/auth/calendar]
+            https://www.googleapis.com/auth/calendar: Acceso completo al calendario del usuario
