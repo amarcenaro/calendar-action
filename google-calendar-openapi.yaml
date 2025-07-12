@@ -1,0 +1,148 @@
+openapi: 3.1.0
+info:
+  title: Google Calendar Events API
+  description: Permite crear, obtener, actualizar y eliminar eventos del calendario de Google.
+  version: 1.0.0
+servers:
+  - url: https://www.googleapis.com/calendar/v3
+    description: Google Calendar API
+
+paths:
+  /calendars/{calendarId}/events:
+    post:
+      operationId: createEvent
+      summary: Crea un nuevo evento en el calendario.
+      parameters:
+        - name: calendarId
+          in: path
+          required: true
+          description: El ID del calendario. Usa "primary" para el calendario principal.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                summary:
+                  type: string
+                description:
+                  type: string
+                start:
+                  type: object
+                  properties:
+                    dateTime:
+                      type: string
+                      format: date-time
+                    timeZone:
+                      type: string
+                end:
+                  type: object
+                  properties:
+                    dateTime:
+                      type: string
+                      format: date-time
+                    timeZone:
+                      type: string
+              required: [summary, start, end]
+      responses:
+        '200':
+          description: Evento creado exitosamente.
+
+  /calendars/{calendarId}/events/{eventId}:
+    get:
+      operationId: getEvent
+      summary: Obtiene detalles de un evento específico.
+      parameters:
+        - name: calendarId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles del evento.
+
+    patch:
+      operationId: updateEvent
+      summary: Actualiza un evento existente.
+      parameters:
+        - name: calendarId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                summary:
+                  type: string
+                description:
+                  type: string
+                start:
+                  type: object
+                  properties:
+                    dateTime:
+                      type: string
+                      format: date-time
+                    timeZone:
+                      type: string
+                end:
+                  type: object
+                  properties:
+                    dateTime:
+                      type: string
+                      format: date-time
+                    timeZone:
+                      type: string
+      responses:
+        '200':
+          description: Evento actualizado exitosamente.
+
+    delete:
+      operationId: deleteEvent
+      summary: Elimina un evento específico.
+      parameters:
+        - name: calendarId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Evento eliminado correctamente.
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
+          tokenUrl: https://oauth2.googleapis.com/token
+          scopes:
+            https://www.googleapis.com/auth/calendar: Acceso completo al calendario del usuario.
+
+security:
+  - oauth2: [https://www.googleapis.com/auth/calendar]
